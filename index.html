@@ -33,7 +33,7 @@
     <div class="card">
       <h2><span class="ic"><svg class="svg"><use href="#i-user"/></svg></span>Data Karyawan</h2>
       <div class="row3">
-        <fieldset>
+        <fieldset class="s2">
           <legend>Status Karyawan</legend>
           <label class="radio"><input type="radio" name="mode" id="gu" checked> Gross Up (Pajak ditanggung perusahaan)</label>
           <label class="radio"><input type="radio" name="mode" id="gr"> Gross (Pajak ditanggung karyawan)</label>
@@ -47,21 +47,20 @@
       </div>
       <div class="row3">
         <label class="field">PTKP <input id="ptkp" readonly></label>
-        <label class="field">Masa Pajak
-          <select id="masa"><option value="ter">Januari – November (TER)</option><option value="dec">Desember / masa pajak terakhir (Pasal 17)</option></select>
-        </label>
         <label class="field">Tahun Pajak <input id="tahun" value="2026" readonly></label>
+        <label class="field s2">Masa Pajak
+          <select id="masa"><option value="ter">Jan – Nov (TER)</option><option value="dec">Desember (Pasal 17)</option></select>
+        </label>
       </div>
-    </div>
 
     <div class="card">
       <h2><span class="ic"><svg class="svg"><use href="#i-bag"/></svg></span>Batas Upah &amp; Tarif BPJS</h2>
       <div class="bpjs">
         <div class="brow head"><span>Program</span><span>Karyawan</span><span>Perusahaan</span><span>Batas upah</span></div>
         <div class="brow"><b>BPJS Kesehatan</b><div data-l="Karyawan"><span class="in"><input class="pc" id="kesK" value="1" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="kesP" value="4" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Batas upah"><span class="in"><i class="pre">Rp</i><input class="rp pad" id="maxKes" value="12000000" inputmode="numeric" autocomplete="off"></span></div></div>
-        <div class="brow"><b>JHT</b><div data-l="Karyawan"><span class="in"><input class="pc" id="jhtK" value="2" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jhtP" value="3,7" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Batas upah"><span class="na">Tanpa batas</span></div></div>
+        <div class="brow"><b>JHT</b><div data-l="Karyawan"><span class="in"><input class="pc" id="jhtK" value="2" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jhtP" value="3,7" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div class="hm" data-l="Batas upah"><span class="na">Tanpa batas</span></div></div>
         <div class="brow"><b>JP</b><div data-l="Karyawan"><span class="in"><input class="pc" id="jpK" value="1" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jpP" value="2" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Batas upah"><span class="in"><i class="pre">Rp</i><input class="rp pad" id="maxJp" value="11086300" inputmode="numeric" autocomplete="off"></span></div></div>
-        <div class="brow"><b>JSHK DKI Jakarta</b><div data-l="Karyawan"><span class="na">—</span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jshk" value="0,24" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Batas upah"><span class="na">—</span></div></div>
+        <div class="brow"><b>JSHK DKI Jakarta</b><div class="hm" data-l="Karyawan"><span class="na">—</span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jshk" value="0,24" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div class="hm" data-l="Batas upah"><span class="na">—</span></div></div>
       </div>
     </div>
     <div class="card">
@@ -72,7 +71,7 @@
     <button class="cta" id="btnReset" type="button"><svg class="svg"><use href="#i-reset"/></svg> Reset</button>
   </section>
 
-  <section class="col">
+  <section class="col result">
     <div class="banner"><svg class="svg"><use href="#i-chart"/></svg> Hasil Perhitungan</div>
     <div class="card flush">
       <h3 class="sub y"><span class="ic"><svg class="svg"><use href="#i-user"/></svg></span>Rincian Potongan Karyawan</h3>

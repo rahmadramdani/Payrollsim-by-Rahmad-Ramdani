@@ -98,6 +98,46 @@ function calc() {
   $('cost').textContent = rp(bruto - nonCash + totBeban);
 }
 
+// Dropdown kustom (menggantikan <select> bawaan browser yang jelek di HP)
+const closeAll = () => document.querySelectorAll('.dd.open').forEach(d => d._close());
+document.querySelectorAll('select').forEach(sel => {
+  sel.classList.add('native'); sel.tabIndex = -1; sel.setAttribute('aria-hidden', 'true');
+  const dd = document.createElement('div'); dd.className = 'dd';
+  dd.innerHTML = '<button type="button" class="dd-btn" aria-haspopup="listbox" aria-expanded="false"><span></span><i></i></button><ul class="dd-list" role="listbox"></ul>';
+  sel.after(dd);
+  const btn = dd.firstChild, list = dd.lastChild, text = btn.firstChild;
+  list.innerHTML = [...sel.options].map(o => `<li role="option" data-v="${o.value}">${o.text}</li>`).join('');
+  const sync = () => {
+    text.textContent = sel.selectedOptions[0].text;
+    [...list.children].forEach(li => li.setAttribute('aria-selected', li.dataset.v === sel.value));
+  };
+  const close = () => { dd.classList.remove('open', 'up'); btn.setAttribute('aria-expanded', 'false'); [...list.children].forEach(li => li.classList.remove('act')); };
+  const open = () => {
+    closeAll(); dd.classList.add('open'); btn.setAttribute('aria-expanded', 'true');
+    const r = btn.getBoundingClientRect(), h = list.offsetHeight;
+    if (innerHeight - r.bottom < h + 16 && r.top > h + 16) dd.classList.add('up'); // buka ke atas bila ruang bawah kurang
+    const cur = list.querySelector('[aria-selected=true]'); if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
+  };
+  const pick = v => { sel.value = v; sync(); close(); sel.dispatchEvent(new Event('input', { bubbles: true })); btn.focus(); };
+  btn.onclick = () => dd.classList.contains('open') ? close() : open();
+  list.onclick = e => { const li = e.target.closest('li'); if (li) pick(li.dataset.v); };
+  btn.onkeydown = e => {
+    const items = [...list.children], isOpen = dd.classList.contains('open');
+    let i = items.findIndex(li => li.classList.contains('act'));
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!isOpen) { open(); i = items.findIndex(li => li.dataset.v === sel.value); } else i += e.key === 'ArrowDown' ? 1 : -1;
+      i = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach(li => li.classList.remove('act')); items[i].classList.add('act');
+      if (items[i].scrollIntoView) items[i].scrollIntoView({ block: 'nearest' });
+    } else if ((e.key === 'Enter' || e.key === ' ') && isOpen) {
+      e.preventDefault(); const a = list.querySelector('.act'); a ? pick(a.dataset.v) : close();
+    } else if (e.key === 'Escape') close();
+  };
+  sel._sync = sync; dd._close = close; sync();
+});
+document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAll(); });
+
 // Simpan nilai awal untuk tombol Reset
 const DEFAULTS = [...document.querySelectorAll('input:not([readonly]),select')].map(el => [el, el.type === 'radio' ? el.checked : el.value]);
 
@@ -110,6 +150,7 @@ document.addEventListener('change', e => { if (e.target.name === 'mode') calc();
 $('btnReset').onclick = () => {
   DEFAULTS.forEach(([el, v]) => { if (el.type === 'radio') el.checked = v; else el.value = v; });
   document.querySelectorAll('.rp').forEach(el => el.value = fmt(num(el.id)));
+  document.querySelectorAll('select').forEach(s => s._sync());
   calc();
 };
 $('btnPanduan').onclick = () => $('panduan').showModal();

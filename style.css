@@ -1,4 +1,4 @@
-:root{--y:#ffc93c;--y2:#ffd966;--yl:#fff6d6;--bl:#eceffd;--ink:#1f2330;--mut:#5b6070;--line:#e6e6ec;--bg:#fffdf6;--card:#fff;--inp:#f4f4f7;--r:12px}
+:root{color-scheme:light dark;--y:#ffc93c;--y2:#ffd966;--yl:#fff6d6;--bl:#eceffd;--ink:#1f2330;--mut:#5b6070;--line:#e6e6ec;--bg:#fffdf6;--card:#fff;--inp:#f4f4f7;--r:12px}
 @media(prefers-color-scheme:dark){:root{--ink:#f2f2f5;--mut:#a7abb8;--line:#33364a;--bg:#14151c;--card:#1d1f2b;--inp:#2a2d3d;--yl:#3a3320;--bl:#262a45}}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -50,7 +50,7 @@ input[readonly]{color:var(--mut)}
 dialog{max-width:640px;width:calc(100% - 32px);border:0;border-radius:14px;padding:22px;background:var(--card);color:var(--ink)}dialog::backdrop{background:rgba(0,0,0,.4)}
 dialog li{margin-bottom:8px;line-height:1.5}code{background:var(--inp);padding:1px 5px;border-radius:4px}
 @media(max-width:1040px){.grid{grid-template-columns:minmax(0,1fr)}.col.result{position:static}}
-@media(max-width:640px){.row3{grid-template-columns:1fr 1fr}.row3>:first-child{grid-column:1/-1}.row4{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr}.summary>div:first-child{border:0;padding:0}.brand p{display:none}.earn div{grid-template-columns:minmax(0,1fr) 22px 120px}.lines li{font-size:13.5px}}
+@media(max-width:640px){.row3{grid-template-columns:1fr 1fr}.s2{grid-column:1/-1}.row4{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr}.summary>div:first-child{border:0;padding:0}.brand p{display:none}.earn div{grid-template-columns:minmax(0,1fr) 22px 120px}.lines li{font-size:13.5px}}
 
 .bpjs{display:flex;flex-direction:column}
 .brow{display:grid;grid-template-columns:minmax(120px,1.1fr) repeat(3,minmax(0,1fr));gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
@@ -61,9 +61,32 @@ dialog li{margin-bottom:8px;line-height:1.5}code{background:var(--inp);padding:1
 .brow>div::before{display:none}
 @media(max-width:640px){
  .brow.head{display:none}
- .brow{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;padding:12px 0}
+ .brow{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;padding:12px 0}
+ .brow>div[data-l='Batas upah']{grid-column:1/-1}
+ .hm{display:none}
  .brow>b{grid-column:1/-1}
  .brow>div::before{display:block;content:attr(data-l);font-size:11px;font-weight:600;color:var(--mut);margin-bottom:4px}
  .brow .in input.pad{padding-left:32px;font-size:13px}
 }
-@media(max-width:380px){.brow{grid-template-columns:1fr 1fr}}
+
+.total span{min-width:0}.total b{white-space:nowrap;font-variant-numeric:tabular-nums}
+.field{position:relative}
+select.native{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;left:0;bottom:0}
+.dd{position:relative}
+.dd-btn{width:100%;height:42px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--inp);color:var(--ink);font:inherit;font-weight:500;cursor:pointer;text-align:left}
+.dd-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-btn i{flex:none;width:8px;height:8px;border:solid var(--mut);border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg);transition:transform .15s}
+.dd.open .dd-btn{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,201,60,.35)}
+.dd.open .dd-btn i{transform:translateY(2px) rotate(-135deg)}
+.dd-list{display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;margin:0;padding:6px;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.2);max-height:260px;overflow:auto}
+.dd.open .dd-list{display:block}.dd.up .dd-list{top:auto;bottom:calc(100% + 6px)}
+.dd-list li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer}
+.dd-list li:hover,.dd-list li.act{background:var(--inp)}
+.dd-list li[aria-selected=true]{background:var(--yl);font-weight:700}
+.dd-list li[aria-selected=true]::after{content:"";flex:none;width:6px;height:11px;border:solid #e5a400;border-width:0 2px 2px 0;transform:rotate(45deg) translateY(-2px)}
+@media(max-width:640px){
+ .field input,.in input,.earn input,.dd-btn{font-size:16px}
+ .dd-list li{padding:13px 12px;font-size:15px}
+ .total{font-size:14px;padding:12px 16px}.lines{padding:0 16px}.sub{padding:12px 16px}
+ .card{padding:16px}
+}
