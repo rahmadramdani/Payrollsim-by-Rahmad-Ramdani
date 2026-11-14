@@ -116,3 +116,9 @@ select.native{position:absolute;opacity:0;pointer-events:none;width:1px;height:1
 .note p{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--mut)}
 @media(max-width:900px){.note ul{grid-template-columns:1fr;gap:14px}}
 @media(max-width:640px){.note-card{padding:16px}}
+
+.actions{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
+.cta.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.cta.ghost:hover{background:var(--inp);filter:none}
+.cta:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.3)}
+@media(max-width:420px){.actions{grid-template-columns:1fr}}

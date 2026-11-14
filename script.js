@@ -8,6 +8,7 @@ const TER = {
 };
 // Pasal 17 UU PPh (UU HPP): [batas atas PKP, tarif]
 const PASAL17 = [[60e6,.05],[250e6,.15],[500e6,.25],[5e9,.30],[Infinity,.35]];
+let LAST = null; // hasil perhitungan terakhir, dipakai oleh Export to PDF
 const PTKP_DASAR = 54e6, PTKP_TAMBAHAN = 4.5e6;
 
 const EARN = [
@@ -91,11 +92,36 @@ function calc() {
   $('beban').innerHTML = beban.map(([l, v]) => `<li><span>${l}</span><b>${rp(v)}</b></li>`).join('');
   const totBeban = co.kes + co.jht + co.jp + co.jshk;
 
+  const thp = bruto - nonCash - totPot - (grossUp ? T : 0), cost = bruto - nonCash + totBeban;
   $('bruto').textContent = rp(bruto);
   $('totPot').textContent = rp(totPot);
   $('totBeban').textContent = rp(totBeban);
-  $('thp').textContent = rp(bruto - nonCash - totPot - (grossUp ? T : 0));
-  $('cost').textContent = rp(bruto - nonCash + totBeban);
+  $('thp').textContent = rp(thp);
+  $('cost').textContent = rp(cost);
+
+  // Data untuk laporan PDF
+  const ter = $('masa').value === 'ter', lim = id => num(id) ? 'Rp ' + fmt(num(id)) : '-';
+  LAST = {
+    grossUp, status, ptkp, kawin: kawin ? 'Kawin' : 'Belum Kawin', tgg: tgg + ' Orang',
+    masa: ter ? 'Jan – Nov 2026 (TER)' : 'Des 2026 (Pasal 17)',
+    bpjs: [
+      ['BPJS Kesehatan', $('kesK').value + '%', $('kesP').value + '%', lim('maxKes')],
+      ['JHT', $('jhtK').value + '%', $('jhtP').value + '%', '-'],
+      ['JP', $('jpK').value + '%', $('jpP').value + '%', lim('maxJp')],
+      ['JSHK DKI Jakarta', '-', $('jshk').value + '%', '-']
+    ],
+    earn: EARN.map(([id, label]) => [id, label, id === 'tPph' ? T : num(id)]),
+    bruto, totPot, totBeban, thp, cost,
+    potongan: [
+      { l: `BPJS Kesehatan (${$('kesK').value}%)`, v: emp.kes }, { l: `JHT (${$('jhtK').value}%)`, v: emp.jht }, { l: `JP (${$('jpK').value}%)`, v: emp.jp },
+      { l: ter ? `PPh 21 (TER ${cat} ${terRate(cat, bruto).toString().replace('.', ',')}%)` : 'PPh 21 (Pasal 17)', v: pajak, info: grossUp }
+    ],
+    beban: [
+      { l: `BPJS Kesehatan (${$('kesP').value}%)`, v: co.kes }, { l: `JHT (${$('jhtP').value}%)`, v: co.jht },
+      { l: `JP (${$('jpP').value}%)`, v: co.jp }, { l: `JSHK DKI Jakarta (${$('jshk').value}%)`, v: co.jshk }
+    ]
+  };
+  $('btnPdf').disabled = bruto === 0; // tombol aktif setelah ada penghasilan
 }
 
 // Dropdown kustom (menggantikan <select> bawaan browser yang jelek di HP)
@@ -152,6 +178,11 @@ $('btnReset').onclick = () => {
   document.querySelectorAll('.rp').forEach(el => el.value = fmt(num(el.id)));
   document.querySelectorAll('select').forEach(s => s._sync());
   calc();
+};
+$('btnPdf').onclick = () => {
+  if (!LAST) return;
+  if (!window.jspdf || !window.PayrollPdf) { alert('Pustaka PDF belum termuat. Periksa koneksi internet lalu muat ulang halaman.'); return; }
+  PayrollPdf.build(LAST, window.jspdf.jsPDF).save(PayrollPdf.fileName());
 };
 document.querySelectorAll('.rp').forEach(el => el.value = fmt(num(el.id)));
 calc();
