@@ -95,7 +95,6 @@ select.native{position:absolute;opacity:0;pointer-events:none;width:1px;height:1
 .cta{width:100%}.cta.small{width:auto}
 .bruto span,.total span{flex:1;min-width:0}
 .bruto b{white-space:nowrap;font-variant-numeric:tabular-nums}
-.note{max-width:1360px;margin:0 auto;padding:0 clamp(16px,3vw,32px) 28px;color:var(--mut);font-size:12px;line-height:1.55}
 @media(max-width:640px){
  .row2{grid-template-columns:1fr}
  .earn div{grid-template-columns:30px minmax(0,1fr);gap:4px 0;padding:10px 0}
@@ -105,3 +104,15 @@ select.native{position:absolute;opacity:0;pointer-events:none;width:1px;height:1
  .bruto{padding:14px 16px;font-size:15px}
  h1{font-size:20px}
 }
+
+.note{max-width:1360px;margin:0 auto;padding:0 clamp(16px,3vw,32px) 32px}
+.note-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 22px}
+.note h3{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ink)}
+.note h3 svg{width:18px;height:18px;color:#e5a400}
+.note ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.note li{display:flex;flex-direction:column;gap:4px;padding-left:12px;border-left:3px solid var(--y)}
+.note li b{font-size:13px;font-weight:600}
+.note li span{font-size:12.5px;line-height:1.5;color:var(--mut)}
+.note p{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--mut)}
+@media(max-width:900px){.note ul{grid-template-columns:1fr;gap:14px}}
+@media(max-width:640px){.note-card{padding:16px}}
