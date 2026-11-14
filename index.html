@@ -25,7 +25,6 @@
     <div class="logo"><svg class="svg"><use href="#i-calc"/></svg></div>
     <div><h1>PayrollSim by Rahmad Ramdani</h1><p>Hitung gaji, potongan, dan take home pay dengan mudah</p></div>
   </div>
-  <button class="link" id="btnPanduan" type="button"><svg class="svg"><use href="#i-info"/></svg> Panduan</button>
 </header>
 
 <main class="grid">
@@ -45,13 +44,13 @@
           <select id="tanggungan"><option value="0">0 Orang</option><option value="1">1 Orang</option><option value="2">2 Orang</option><option value="3">3 Orang</option></select>
         </label>
       </div>
-      <div class="row3">
-        <label class="field">PTKP <input id="ptkp" readonly></label>
-        <label class="field">Tahun Pajak <input id="tahun" value="2026" readonly></label>
-        <label class="field s2">Masa Pajak
+      <div class="row2">
+        <label class="field">PTKP Tahun 2026 <input id="ptkp" readonly></label>
+        <label class="field">Masa Pajak
           <select id="masa"><option value="ter">Jan – Nov (TER)</option><option value="dec">Desember (Pasal 17)</option></select>
         </label>
       </div>
+    </div>
 
     <div class="card">
       <h2><span class="ic"><svg class="svg"><use href="#i-bag"/></svg></span>Batas Upah &amp; Tarif BPJS</h2>
@@ -89,19 +88,7 @@
     </div>
   </section>
 </main>
-
-<dialog id="panduan">
-  <h3>Panduan &amp; Dasar Perhitungan</h3>
-  <ul>
-    <li><b>PPh 21 Januari–November:</b> penghasilan bruto bulan itu × Tarif Efektif Rata-rata (TER) bulanan, sesuai PP 58/2023 dan PMK 168/2023. Kategori TER ditentukan dari status PTKP: A (TK/0, TK/1, K/0), B (TK/2, TK/3, K/1, K/2), C (K/3).</li>
-    <li><b>Desember / masa pajak terakhir:</b> memakai tarif Pasal 17 UU PPh (5%–35%) atas penghasilan setahun, dikurangi biaya jabatan (5%, maks. Rp6 juta/tahun), iuran JHT + JP karyawan, dan PTKP; lalu dikurangi PPh 21 yang sudah dipotong Jan–Nov. Simulasi ini mengasumsikan penghasilan sama setiap bulan.</li>
-    <li><b>Gross Up:</b> pajak ditanggung perusahaan. Kolom Tunjangan PPh21 dihitung otomatis (iterasi) sampai pajak = tunjangan.</li>
-    <li><b>Upah dasar BPJS:</b> Gaji Pokok + Tunjangan Tetap + Tunjangan Tidak Tetap. Ubah di <code>script.js</code> (<code>upahBpjs</code>) bila kebijakan perusahaan berbeda.</li>
-    <li><b>Tunjangan JKK+JKM &amp; BPJS Kesehatan perusahaan:</b> diisi bila ingin dimasukkan sebagai penghasilan bruto untuk pajak. Nilainya bukan kas yang diterima karyawan, jadi tidak masuk THP dan tidak dihitung dua kali di biaya perusahaan.</li>
-    <li>Batas upah JP berubah tiap Maret. Periksa surat edaran BPJS Ketenagakerjaan terbaru dan perbarui kolomnya.</li>
-  </ul>
-  <button class="cta small" id="tutup" type="button">Tutup</button>
-</dialog>
+<footer class="note">PPh 21: TER bulanan (PP 58/2023, PMK 168/2023) untuk Januari–November dan tarif Pasal 17 untuk Desember. Upah dasar BPJS = gaji pokok + tunjangan tetap + tunjangan tidak tetap. Ini simulasi, bukan pengganti perhitungan resmi.</footer>
 <script src="script.js"></script>
 </body>
 </html>

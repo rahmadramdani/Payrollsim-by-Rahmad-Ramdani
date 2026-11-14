@@ -45,7 +45,7 @@ function calc() {
   const status = (kawin ? 'K/' : 'TK/') + tgg;
   const ptkp = PTKP_DASAR + (kawin ? PTKP_TAMBAHAN : 0) + tgg * PTKP_TAMBAHAN;
   const cat = status === 'K/3' ? 'C' : ['TK/2', 'TK/3', 'K/1', 'K/2'].includes(status) ? 'B' : 'A';
-  $('ptkp').value = `${status} (${fmt(ptkp)}/thn)`;
+  $('ptkp').value = `${status} · Rp ${fmt(ptkp)}/tahun`;
 
   // Upah dasar BPJS (ubah di sini bila kebijakan perusahaan berbeda)
   const upahBpjs = num('gapok') + num('tTetap') + num('tTdk');
@@ -153,7 +153,5 @@ $('btnReset').onclick = () => {
   document.querySelectorAll('select').forEach(s => s._sync());
   calc();
 };
-$('btnPanduan').onclick = () => $('panduan').showModal();
-$('tutup').onclick = () => $('panduan').close();
 document.querySelectorAll('.rp').forEach(el => el.value = fmt(num(el.id)));
 calc();
