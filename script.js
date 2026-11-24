@@ -14,7 +14,7 @@ const PTKP_DASAR = 54e6, PTKP_TAMBAHAN = 4.5e6;
 const EARN = [
   ['gapok','Gaji Pokok',0],['tTetap','Tunjangan Tetap',0],['tTdk','Tunjangan Tidak Tetap',0],
   ['natura','Natura & Kenikmatan',0],['lembur','Lembur',0],['bonus','Bonus',0],['thr','THR',0],
-  ['tPph','Tunjangan PPh21',0],['tJkk','Tunjangan JKK + JKM Perusahaan',0],['tKes','Tunjangan BPJS Kesehatan Perusahaan',0]
+  ['tPph','Tunjangan PPh21',0]
 ];
 
 const $ = id => document.getElementById(id);
@@ -53,10 +53,11 @@ function calc() {
   const kesBase = Math.min(upahBpjs, num('maxKes') || Infinity), jpBase = Math.min(upahBpjs, num('maxJp') || Infinity); // kolom batas 0/kosong = tanpa batas
   const r = (b, id) => Math.round(b * pct(id) / 100);
   const emp = { kes: r(kesBase, 'kesK'), jht: r(upahBpjs, 'jhtK'), jp: r(jpBase, 'jpK') };
-  const co = { kes: r(kesBase, 'kesP'), jht: r(upahBpjs, 'jhtP'), jp: r(jpBase, 'jpP'), jshk: r(upahBpjs, 'jshk') };
+  const co = { kes: r(kesBase, 'kesP'), jht: r(upahBpjs, 'jhtP'), jp: r(jpBase, 'jpP'), jshk: r(upahBpjs, 'jshk'), jkk: r(upahBpjs, 'jkk'), jkm: r(upahBpjs, 'jkm') };
+  const jkkJkm = co.kes + co.jkk + co.jkm; // premi BPJS Kes + JKK + JKM ditanggung perusahaan, tetap objek PPh 21 (PMK 168/2023)
 
-  const nonCash = num('tJkk') + num('tKes');
-  const brutoTanpaT = EARN.reduce((s, [id]) => id === 'tPph' ? s : s + num(id), 0);
+  const nonCash = jkkJkm;
+  const brutoTanpaT = EARN.reduce((s, [id]) => id === 'tPph' ? s : s + num(id), 0) + jkkJkm;
 
   const pph = b => {
     if ($('masa').value === 'ter') return Math.floor(b * terRate(cat, b) / 100);
@@ -87,13 +88,15 @@ function calc() {
   const totPot = emp.kes + emp.jht + emp.jp + (grossUp ? 0 : pajak);
   const beban = [
     [`BPJS Kesehatan (${$('kesP').value}%)`, co.kes], [`BPJS Ketenagakerjaan (JHT ${$('jhtP').value}%)`, co.jht],
-    [`BPJS Ketenagakerjaan (JP ${$('jpP').value}%)`, co.jp], [`JSHK DKI Jakarta (${$('jshk').value}%)`, co.jshk]
+    [`BPJS Ketenagakerjaan (JP ${$('jpP').value}%)`, co.jp],
+    [`BPJS Ketenagakerjaan (JKK ${$('jkk').value}%)`, co.jkk], [`BPJS Ketenagakerjaan (JKM ${$('jkm').value}%)`, co.jkm], [`JSHK DKI Jakarta (${$('jshk').value}%)`, co.jshk]
   ];
   $('beban').innerHTML = beban.map(([l, v]) => `<li><span>${l}</span><b>${rp(v)}</b></li>`).join('');
-  const totBeban = co.kes + co.jht + co.jp + co.jshk;
+  const totBeban = co.kes + co.jht + co.jp + co.jkk + co.jkm + co.jshk;
 
   const thp = bruto - nonCash - totPot - (grossUp ? T : 0), cost = bruto - nonCash + totBeban;
   $('bruto').textContent = rp(bruto);
+  $('jkkNote').textContent = jkkJkm ? `Sudah termasuk premi BPJS Kesehatan + JKK + JKM perusahaan ${rp(jkkJkm)} (objek PPh 21, bukan diterima tunai).` : '';
   $('totPot').textContent = rp(totPot);
   $('totBeban').textContent = rp(totBeban);
   $('thp').textContent = rp(thp);
@@ -108,9 +111,11 @@ function calc() {
       ['BPJS Kesehatan', $('kesK').value + '%', $('kesP').value + '%', lim('maxKes')],
       ['JHT', $('jhtK').value + '%', $('jhtP').value + '%', '-'],
       ['JP', $('jpK').value + '%', $('jpP').value + '%', lim('maxJp')],
+      ['JKK', '-', $('jkk').value + '%', '-'],
+      ['JKM', '-', $('jkm').value + '%', '-'],
       ['JSHK DKI Jakarta', '-', $('jshk').value + '%', '-']
     ],
-    earn: EARN.map(([id, label]) => [id, label, id === 'tPph' ? T : num(id)]),
+    earn: [...EARN.map(([id, label]) => [id, label, id === 'tPph' ? T : num(id)]), ['tJkk', 'Premi BPJS Kes, JKK & JKM Perusahaan', jkkJkm]],
     bruto, totPot, totBeban, thp, cost,
     potongan: [
       { l: `BPJS Kesehatan (${$('kesK').value}%)`, v: emp.kes }, { l: `JHT (${$('jhtK').value}%)`, v: emp.jht }, { l: `JP (${$('jpK').value}%)`, v: emp.jp },
@@ -118,7 +123,8 @@ function calc() {
     ],
     beban: [
       { l: `BPJS Kesehatan (${$('kesP').value}%)`, v: co.kes }, { l: `JHT (${$('jhtP').value}%)`, v: co.jht },
-      { l: `JP (${$('jpP').value}%)`, v: co.jp }, { l: `JSHK DKI Jakarta (${$('jshk').value}%)`, v: co.jshk }
+      { l: `JP (${$('jpP').value}%)`, v: co.jp },
+      { l: `JKK (${$('jkk').value}%)`, v: co.jkk }, { l: `JKM (${$('jkm').value}%)`, v: co.jkm }, { l: `JSHK DKI Jakarta (${$('jshk').value}%)`, v: co.jshk }
     ]
   };
   $('btnPdf').disabled = bruto === 0; // tombol aktif setelah ada penghasilan
@@ -166,6 +172,9 @@ document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAll
 
 // Simpan nilai awal untuk tombol Reset
 const DEFAULTS = [...document.querySelectorAll('input:not([readonly]),select')].map(el => [el, el.type === 'radio' ? el.checked : el.value]);
+
+// Pilih kelas risiko JKK -> isi tarif JKK (tarif tetap bisa diubah manual)
+document.addEventListener('input', e => { if (e.target.id === 'jkkKelas') $('jkk').value = e.target.value; });
 
 // Format ribuan saat mengetik
 document.addEventListener('input', e => {

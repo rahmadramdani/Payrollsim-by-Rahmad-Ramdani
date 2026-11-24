@@ -122,3 +122,6 @@ select.native{position:absolute;opacity:0;pointer-events:none;width:1px;height:1
 .cta.ghost:hover{background:var(--inp);filter:none}
 .cta:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.3)}
 @media(max-width:420px){.actions{grid-template-columns:1fr}}
+
+.hint{display:block;margin-top:8px;color:var(--mut);font-size:12px;line-height:1.4}
+.hint:empty{display:none}

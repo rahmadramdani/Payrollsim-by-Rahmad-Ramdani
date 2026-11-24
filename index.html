@@ -56,10 +56,12 @@
     <div class="card">
       <h2><span class="ic"><svg class="svg"><use href="#i-bag"/></svg></span>Batas Upah &amp; Tarif BPJS</h2>
       <div class="bpjs">
-        <div class="brow head"><span>Program</span><span>Karyawan</span><span>Perusahaan</span><span>Batas upah</span></div>
+        <div class="brow head"><span>Program</span><span>Karyawan</span><span>Perusahaan</span><span>Batas upah / Kelas risiko</span></div>
         <div class="brow"><b>BPJS Kesehatan</b><div data-l="Karyawan"><span class="in"><input class="pc" id="kesK" value="1" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="kesP" value="4" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Batas upah"><span class="in"><i class="pre">Rp</i><input class="rp pad" id="maxKes" value="12000000" inputmode="numeric" autocomplete="off"></span></div></div>
         <div class="brow"><b>JHT</b><div data-l="Karyawan"><span class="in"><input class="pc" id="jhtK" value="2" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jhtP" value="3,7" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div class="hm" data-l="Batas upah"><span class="na">Tanpa batas</span></div></div>
         <div class="brow"><b>JP</b><div data-l="Karyawan"><span class="in"><input class="pc" id="jpK" value="1" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jpP" value="2" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Batas upah"><span class="in"><i class="pre">Rp</i><input class="rp pad" id="maxJp" value="11086300" inputmode="numeric" autocomplete="off"></span></div></div>
+        <div class="brow"><b>JKK</b><div class="hm" data-l="Karyawan"><span class="na">—</span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jkk" value="0,24" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div data-l="Kelas risiko"><select id="jkkKelas"><option value="0,24">Sangat rendah · 0,24%</option><option value="0,54">Rendah · 0,54%</option><option value="0,89">Sedang · 0,89%</option><option value="1,27">Tinggi · 1,27%</option><option value="1,74">Sangat tinggi · 1,74%</option></select></div></div>
+        <div class="brow"><b>JKM</b><div class="hm" data-l="Karyawan"><span class="na">—</span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jkm" value="0,3" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div class="hm" data-l="Batas upah"><span class="na">Tanpa batas</span></div></div>
         <div class="brow"><b>JSHK DKI Jakarta</b><div class="hm" data-l="Karyawan"><span class="na">—</span></div><div data-l="Perusahaan"><span class="in"><input class="pc" id="jshk" value="0,24" inputmode="decimal" autocomplete="off"><i>%</i></span></div><div class="hm" data-l="Batas upah"><span class="na">—</span></div></div>
       </div>
     </div>
@@ -67,6 +69,7 @@
       <h2><span class="ic"><svg class="svg"><use href="#i-coin"/></svg></span>Penghasilan</h2>
       <div class="earn" id="earnings"></div>
       <div class="bruto"><span>Penghasilan Bruto</span><b id="bruto">Rp 0</b></div>
+      <small class="hint" id="jkkNote"></small>
     </div>
     <div class="actions">
       <button class="cta" id="btnPdf" type="button" disabled title="Isi penghasilan terlebih dahulu"><svg class="svg"><use href="#i-download"/></svg> Export to PDF</button>
@@ -84,7 +87,7 @@
     <div class="card flush">
       <h3 class="sub b"><span class="ic"><svg class="svg"><use href="#i-build"/></svg></span>Rincian Beban Perusahaan</h3>
       <ul class="lines" id="beban"></ul>
-      <div class="total b"><span>Total Beban Perusahaan (termasuk JSHK)</span><b id="totBeban">Rp 0</b></div>
+      <div class="total b"><span>Total Beban Perusahaan (termasuk JKK, JKM &amp; JSHK)</span><b id="totBeban">Rp 0</b></div>
     </div>
     <div class="summary">
       <div><span class="big-ic"><svg class="svg"><use href="#i-wallet"/></svg></span><div><h4>Take Home Pay (THP)</h4><strong id="thp">Rp 0</strong><small>Gaji bersih yang diterima karyawan</small></div></div>
@@ -98,7 +101,7 @@
     <ul>
       <li><b>PPh 21 Januari–November</b><span>Tarif Efektif Rata-rata (TER) bulanan sesuai PP 58/2023 dan PMK 168/2023.</span></li>
       <li><b>PPh 21 Desember</b><span>Tarif progresif Pasal 17 UU PPh atas penghasilan setahun.</span></li>
-      <li><b>Upah dasar BPJS</b><span>Gaji pokok + tunjangan tetap + tunjangan tidak tetap.</span></li>
+      <li><b>Upah dasar BPJS</b><span>Gaji pokok + tunjangan tetap + tunjangan tidak tetap. Premi BPJS Kesehatan, JKK &amp; JKM yang dibayar perusahaan dan menjadi objek PPh 21 (PMK 168/2023).</span></li>
     </ul>
     <p>Hasil bersifat simulasi dan bukan pengganti perhitungan resmi.</p>
   </div>

@@ -3,7 +3,7 @@
   'use strict';
   const C = { yellow: [255, 201, 60], yellow2: [255, 217, 102], pale: [255, 246, 214], band: [255, 231, 150], line: [236, 229, 208],
     ink: [31, 35, 48], mut: [96, 102, 120], grey: [243, 243, 246], border: [255, 214, 100], white: [255, 255, 255] };
-  const SHORT = { tJkk: 'Tunj. JKK + JKM Perusahaan', tKes: 'Tunj. BPJS Kes. Perusahaan' };
+  const SHORT = { tJkk: 'Premi BPJS Kes, JKK, JKM Perush.' };
   const rpf = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
 
   function build(d, JsPDF) {
@@ -98,16 +98,18 @@
     y += dh + 4;
 
     // ---------- Batas Upah & Tarif BPJS ----------
-    const bh = 9 + 6.4 + 4 * 5.8 + 1.5;
+    const bh = 9 + 6.4 + d.bpjs.length * 5 + 1.5;
     card(M, y, CW, bh, 'Batas Upah & Tarif BPJS', 'shield');
     table(M + .3, y + 9, [{ w: 58 }, { w: 40, a: 'c' }, { w: 40, a: 'c' }, { w: 47.4, a: 'c' }],
-      ['Komponen', 'Tarif Karyawan', 'Tarif Perusahaan', 'Batas Upah'], d.bpjs.map(r => ({ cells: r })), 5.8);
+      ['Komponen', 'Tarif Karyawan', 'Tarif Perusahaan', 'Batas Upah'], d.bpjs.map(r => ({ cells: r })), 5);
     y += bh + 4;
 
     // ---------- Penghasilan & Potongan ----------
     const earn = d.earn.filter(e => ['gapok', 'tTetap', 'tTdk'].includes(e[0]) || e[2] > 0);
-    const nMax = Math.max(earn.length, d.potongan.length), rh = nMax > 7 ? 5 : 5.8;
-    const note = d.grossUp ? 4.5 : 0, hh2 = 9 + 6.4 + nMax * rh + note + 1 + 8.5, hw = 91;
+    const nMax = Math.max(earn.length, d.potongan.length);
+    const note = d.grossUp ? 4.5 : 0, ehFix = 9 + 6.4 + d.beban.length * 5 + 1 + 8.5;
+    const rh = Math.max(4.2, Math.min(5.8, (277 - 22 - 8 - y - ehFix - (9 + 6.4 + note + 1 + 8.5)) / nMax));
+    const hh2 = 9 + 6.4 + nMax * rh + note + 1 + 8.5, hw = 91;
     card(M, y, hw, hh2, 'Penghasilan', 'bag'); card(M + CW - hw, y, hw, hh2, 'Rincian Potongan Karyawan', 'scissors');
     table(M + .3, y + 9, [{ w: 55 }, { w: 35.4, a: 'r' }], ['Komponen', 'Nominal'], earn.map(e => ({ cells: [SHORT[e[0]] || e[1], rpf(e[2])] })), rh);
     table(M + CW - hw + .3, y + 9, [{ w: 55 }, { w: 35.4, a: 'r' }], ['Komponen', 'Nominal'],
@@ -118,9 +120,9 @@
     y += hh2 + 4;
 
     // ---------- Beban Perusahaan ----------
-    const eh = 9 + 6.4 + d.beban.length * 5.8 + 1 + 8.5;
+    const eh = ehFix;
     card(M, y, CW, eh, 'Rincian Beban Perusahaan', 'build');
-    table(M + .3, y + 9, [{ w: 140 }, { w: 45.4, a: 'r' }], ['Komponen', 'Nominal'], d.beban.map(b => ({ cells: [b.l, rpf(b.v)] })), 5.8);
+    table(M + .3, y + 9, [{ w: 140 }, { w: 45.4, a: 'r' }], ['Komponen', 'Nominal'], d.beban.map(b => ({ cells: [b.l, rpf(b.v)] })), 5);
     totalRow(M, y + eh - 8.5, CW, 'Total Beban Perusahaan (termasuk JSHK)', rpf(d.totBeban));
     y += eh + 4;
 
